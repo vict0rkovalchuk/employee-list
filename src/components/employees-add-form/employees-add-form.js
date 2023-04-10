@@ -35,6 +35,8 @@ class EmployeesAddForm extends Component {
             type="text"
             className="form-control new-post-label"
             placeholder="Как его зовут?"
+            required
+            minLength={3}
             value={name}
             name="name"
           />
@@ -43,6 +45,7 @@ class EmployeesAddForm extends Component {
             type="number"
             className="form-control new-post-label"
             placeholder="З/П в $?"
+            required
             value={salary}
             name="salary"
           />
