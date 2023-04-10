@@ -1,31 +1,63 @@
+import { Component } from 'react';
+
 import AppInfo from '../app-info/app-info';
 import SearchPanel from '../search-panel/search-panel';
 import AppFilter from '../app-filter/app-filter';
 import EmployeesList from '../employees-list/employees-list';
 import EmployeesAddForm from '../employees-add-form/employees-add-form';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import './app.css';
 
-function App() {
-  const data = [
-    { name: 'John C.', salary: 800, increase: true, key: 1 },
-    { name: 'Alex M.', salary: 3000, increase: false, key: 2 },
-    { name: 'Carl W.', salary: 5000, increase: false, key: 3 }
-  ];
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [
+        { name: 'John C.', salary: 800, increase: true, id: 1 },
+        { name: 'Alex M.', salary: 3000, increase: false, id: 2 },
+        { name: 'Carl W.', salary: 5000, increase: false, id: 3 }
+      ]
+    };
+  }
 
-  return (
-    <div className="app">
-      <AppInfo />
+  deleteItem = id => {
+    this.setState(({ data }) => ({
+      data: data.filter(item => item.id !== id)
+    }));
+  };
 
-      <div className="search-panel">
-        <SearchPanel />
-        <AppFilter />
+  createItem = (name, salary) => {
+    const newItem = {
+      name,
+      salary,
+      increase: false,
+      id: uuidv4()
+    };
+
+    this.setState(({ data }) => ({
+      data: [...data, newItem]
+    }));
+  };
+
+  render() {
+    const { data } = this.state;
+
+    return (
+      <div className="app">
+        <AppInfo />
+
+        <div className="search-panel">
+          <SearchPanel />
+          <AppFilter />
+        </div>
+
+        <EmployeesList data={data} onDelete={this.deleteItem} />
+        <EmployeesAddForm onCreateItem={this.createItem} />
       </div>
-
-      <EmployeesList data={data} />
-      <EmployeesAddForm />
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
