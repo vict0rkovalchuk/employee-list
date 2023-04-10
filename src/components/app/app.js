@@ -15,9 +15,9 @@ class App extends Component {
     super(props);
     this.state = {
       data: [
-        { name: 'John C.', salary: 800, increase: true, id: 1 },
-        { name: 'Alex M.', salary: 3000, increase: false, id: 2 },
-        { name: 'Carl W.', salary: 5000, increase: false, id: 3 }
+        { name: 'John C.', salary: 800, increase: true, rise: false, id: 1 },
+        { name: 'Alex M.', salary: 3000, increase: false, rise: true, id: 2 },
+        { name: 'Carl W.', salary: 5000, increase: false, rise: false, id: 3 }
       ]
     };
   }
@@ -33,6 +33,7 @@ class App extends Component {
       name,
       salary,
       increase: false,
+      rise: false,
       id: uuidv4()
     };
 
@@ -41,19 +42,41 @@ class App extends Component {
     }));
   };
 
+  onToggleProp = (id, prop) => {
+    this.setState(({ data }) => ({
+      data: data.map(item => {
+        return item.id === id
+          ? {
+              ...item,
+              [prop]: !item[prop]
+            }
+          : item;
+      })
+    }));
+  };
+
   render() {
     const { data } = this.state;
+    const totalEmployees = data.length;
+    const increasedEmployees = data.filter(item => item.increase).length;
 
     return (
       <div className="app">
-        <AppInfo />
+        <AppInfo
+          totalEmployees={totalEmployees}
+          increasedEmployees={increasedEmployees}
+        />
 
         <div className="search-panel">
           <SearchPanel />
           <AppFilter />
         </div>
 
-        <EmployeesList data={data} onDelete={this.deleteItem} />
+        <EmployeesList
+          data={data}
+          onDelete={this.deleteItem}
+          onToggleProp={this.onToggleProp}
+        />
         <EmployeesAddForm onCreateItem={this.createItem} />
       </div>
     );
