@@ -86,6 +86,20 @@ class App extends Component {
     this.setState({ filter: e.target.dataset.filter });
   };
 
+  changeInputItemValue = e => {
+    const newSalaryValue = e.target.value
+      .split('')
+      .filter(item => Number(item) || item === '0' || item === 'e')
+      .join('');
+    const id = e.target.dataset.id;
+
+    this.setState(({ data }) => ({
+      data: data.map(item => {
+        return item.id === +id ? { ...item, salary: newSalaryValue } : item;
+      })
+    }));
+  };
+
   render() {
     const { data, term, filter } = this.state;
     const visibleData = this.searchEmp(data, term);
@@ -109,6 +123,7 @@ class App extends Component {
           data={visibleFilteredData}
           onDelete={this.deleteItem}
           onToggleProp={this.onToggleProp}
+          changeInputItemValue={this.changeInputItemValue}
         />
         <EmployeesAddForm onCreateItem={this.createItem} />
       </div>

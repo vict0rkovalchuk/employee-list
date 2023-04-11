@@ -6,7 +6,9 @@ const EmployeesListItem = ({
   onDelete,
   onToggleProp,
   increase,
-  rise
+  rise,
+  id,
+  changeInputItemValue
 }) => {
   let classNames = 'list-group-item d-flex justify-content-between';
 
@@ -23,9 +25,11 @@ const EmployeesListItem = ({
         {name}
       </span>
       <input
+        data-id={id}
+        onChange={changeInputItemValue}
         type="text"
         className="list-group-item-input"
-        defaultValue={`${salary}$`}
+        value={`${salary}$`}
       />
       <div className="d-flex justify-content-center align-items-center">
         <button
